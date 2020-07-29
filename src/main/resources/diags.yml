@@ -25,9 +25,7 @@ rest-config:
    # timeouts in seconds
    requestTimeout: 60
    connectTimeout: 60
-   socketTimeout:  120
-   maxTotalConn: 100
-   maxConnPerRoute: 10
+   socketTimeout:  5
 
 # Number of tiems to re-attempt a rest call
 call-retries: 3

@@ -40,7 +40,7 @@ public class CheckDiagnosticVersion implements Command {
 
         logger.info(Constants.CONSOLE, "Checking for diagnostic version updates.");
         // Only need this once so let it auto-close at the end of the try catch block.
-        try(RestClient restClient = RestClient.getClient(
+        try(RestClient restClient = new RestClient(
                     context.diagsConfig.diagReleaseHost,
                     Constants.DEEFAULT_HTTPS_PORT,
                     context.diagsConfig.diagReleaseScheme,

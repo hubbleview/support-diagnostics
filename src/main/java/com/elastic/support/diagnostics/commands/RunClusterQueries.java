@@ -29,21 +29,11 @@ public class RunClusterQueries extends BaseQuery {
             DiagConfig diagConfig = context.diagsConfig;
             List<RestEntry> entries = new ArrayList<>();
             entries.addAll(context.elasticRestCalls.values());
-            RestClient client;
-            client = ResourceCache.getRestClient(Constants.restInputHost);
-/*            if(ResourceCache.resourceExists(Constants.restTargetHost)){
-                client = ResourceCache.getRestClient(Constants.restTargetHost);
-            }
-            else {
-                client = ResourceCache.getRestClient(Constants.restInputHost);
-            }*/
-
-            runQueries(client, entries, context.tempDir, diagConfig.callRetries, diagConfig.pauseRetries);
+            runQueries(context.restClient, entries, context.tempDir, diagConfig.callRetries, diagConfig.pauseRetries);
         } catch (Throwable t) {
             logger.error( "Error executing REST queries", t);
             throw new DiagnosticException(String.format("Unrecoverable REST Query Execution error - exiting. %s", Constants.CHECK_LOG));
         }
-
     }
 
 }

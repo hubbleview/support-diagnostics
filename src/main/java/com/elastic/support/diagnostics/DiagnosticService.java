@@ -24,8 +24,7 @@ public class DiagnosticService extends ElasticRestClientService {
         ctx.diagsConfig = config;
         ctx.diagnosticInputs = inputs;
 
-        try(
-                RestClient esRestClient = RestClient.getClient(
+        try(RestClient esRestClient = new RestClient(
                     inputs.host,
                     inputs.port,
                     inputs.scheme,
@@ -43,7 +42,7 @@ public class DiagnosticService extends ElasticRestClientService {
                     config.socketTimeout
             )){
 
-            ResourceCache.addRestClient(Constants.restInputHost, esRestClient);
+            ctx.restClient =  esRestClient;
 
             // Create the temp directory - delete if first if it exists from a previous run
             String outputDir = inputs.outputDir;

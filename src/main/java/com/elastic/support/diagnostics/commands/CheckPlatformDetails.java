@@ -25,14 +25,11 @@ public class CheckPlatformDetails implements Command {
     public void execute(DiagnosticContext context) {
 
         try {
-            // Cached from previous executions
-            RestClient restClient = ResourceCache.getRestClient(Constants.restInputHost);
-
             // Populate the node metadata
             Map<String, RestEntry> calls = context.elasticRestCalls;
             RestEntry entry = calls.get("nodes");
             String url = entry.getUrl().replace("?pretty", "/os,process,settings,transport,http?pretty&human");
-            RestResult result = restClient.execQuery(url);
+            RestResult result = context.restClient.execQuery(url);
 
             // Initialize to empty node which mimimizes NPE opportunities
             JsonNode infoNodes = JsonYamlUtils.mapper.createObjectNode();
@@ -52,46 +49,6 @@ public class CheckPlatformDetails implements Command {
                     break;
                 }
             }
-
-            // Removed temporarily until I put in an option to bypass this feature due to
-            // issue where master was inaccessible via http from another node even though it had http configured.
-/*            if (!context.dockerPresent) {
-                // Get the master node id and flag the master node profile
-                entry = calls.get("master");
-                result = restClient.execQuery(entry.getUrl());
-                JsonNode currentMaster = JsonYamlUtils.mapper.createObjectNode();
-                if (result.getStatus() == 200) {
-                    // Strip off the array brackets since there's only one at each end
-                    String mod = result.toString();
-                    mod = mod.substring(1, (mod.length() - 1));
-                    currentMaster = JsonYamlUtils.createJsonNodeFromString(mod);
-                }
-                String currentMasterId = currentMaster.path("id").asText();
-                ProcessProfile masterNode = findMasterNode(currentMasterId, nodeProfiles);
-
-                // If the master node has an http listener configured then we'll use that for the
-                // REST calls. Set up a rest client and add it to the resources.
-                if (differentInstances(context.diagnosticInputs.host, context.diagnosticInputs.port, masterNode.host, masterNode.httpPort) && masterNode.isHttp) {
-                    RestClient masterRestClient = RestClient.getClient(
-                            masterNode.host,
-                            masterNode.httpPort,
-                            context.diagnosticInputs.scheme,
-                            context.diagnosticInputs.user,
-                            context.diagnosticInputs.password,
-                            context.diagnosticInputs.proxyHost,
-                            context.diagnosticInputs.proxyPort,
-                            context.diagnosticInputs.proxyUser,
-                            context.diagnosticInputs.proxyPassword,
-                            context.diagnosticInputs.pkiKeystore,
-                            context.diagnosticInputs.pkiKeystorePass,
-                            context.diagnosticInputs.skipVerification,
-                            context.diagsConfig.connectionTimeout,
-                            context.diagsConfig.connectionRequestTimeout,
-                            context.diagsConfig.socketTimeout);
-
-                    ResourceCache.addRestClient(Constants.restTargetHost, masterRestClient);
-                }
-            }*/
 
             SystemCommand syscmd = null;
             switch (context.diagnosticInputs.diagType) {

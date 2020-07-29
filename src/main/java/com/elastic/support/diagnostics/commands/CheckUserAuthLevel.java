@@ -31,15 +31,13 @@ public class CheckUserAuthLevel implements Command {
         }
 
         // Should already be there.
-        RestClient restClient = ResourceCache.getRestClient(Constants.restInputHost);
-
         boolean hasAuthorization = false;
         Semver version = context.version;
         Map<String, RestEntry> calls = context.elasticRestCalls;
         RestEntry entry =  calls.get("security_users");
         String url = entry.getUrl().replace("?pretty", "/" + context.diagnosticInputs.user);
 
-        RestResult result = restClient.execQuery(url);
+        RestResult result = context.restClient.execQuery(url);
 
         if (result.getStatus() == 200) {
             String userJsonString = result.toString();
@@ -48,7 +46,6 @@ public class CheckUserAuthLevel implements Command {
         }
 
         context.isAuthorized = hasAuthorization;
-
     }
 
     public boolean checkForAuth(int major, String user, JsonNode userNode){

@@ -3,14 +3,18 @@ package com.elastic.support.diagnostics.chain;
 import com.elastic.support.diagnostics.DiagConfig;
 import com.elastic.support.diagnostics.DiagnosticInputs;
 import com.elastic.support.diagnostics.ProcessProfile;
+import com.elastic.support.rest.RestClient;
 import com.elastic.support.rest.RestEntry;
 import com.vdurmont.semver4j.Semver;
+import org.apache.http.client.HttpClient;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class DiagnosticContext {
+
+   public RestClient restClient;
 
    public boolean runSystemCalls = true;
    public boolean isAuthorized = true;
@@ -20,7 +24,6 @@ public class DiagnosticContext {
    public String tempDir = "";
    public String diagVersion;
 
-   //public RestClient esRestClient;
    public DiagConfig diagsConfig;
    public DiagnosticInputs diagnosticInputs;
    public ProcessProfile targetNode;

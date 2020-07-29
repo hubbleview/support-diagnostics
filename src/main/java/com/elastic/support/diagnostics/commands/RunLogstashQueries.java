@@ -29,15 +29,13 @@ public class RunLogstashQueries extends BaseQuery {
     public void execute(DiagnosticContext context) {
 
         try {
-            RestClient client = ResourceCache.getRestClient(Constants.restInputHost);
-
             RestEntryConfig builder = new RestEntryConfig("1.0.0");
             Map restCalls = JsonYamlUtils.readYamlFromClasspath(Constants.LS_REST, true);
             Map<String, RestEntry> entries = builder.buildEntryMap(restCalls);
 
             List<RestEntry> queries = new ArrayList<>();
             queries.addAll(entries.values());
-            runQueries(client, queries, context.tempDir, 0, 0);
+            runQueries(context.restClient, queries, context.tempDir, 0, 0);
 
             // Get the information we need to run system calls. It's easier to just get it off disk after all the REST calls run.
             ProcessProfile nodeProfile = new ProcessProfile();

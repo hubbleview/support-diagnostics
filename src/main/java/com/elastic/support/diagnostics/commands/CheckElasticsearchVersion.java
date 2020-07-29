@@ -38,26 +38,9 @@ public class CheckElasticsearchVersion implements Command {
         DiagnosticInputs inputs = context.diagnosticInputs;
 
         try {
-           RestClient restClient = RestClient.getClient(
-                    context.diagnosticInputs.host,
-                    context.diagnosticInputs.port,
-                    context.diagnosticInputs.scheme,
-                    context.diagnosticInputs.user,
-                    context.diagnosticInputs.password,
-                    context.diagnosticInputs.proxyHost,
-                    context.diagnosticInputs.proxyPort,
-                    context.diagnosticInputs.proxyUser,
-                    context.diagnosticInputs.proxyPassword,
-                    context.diagnosticInputs.pkiKeystore,
-                    context.diagnosticInputs.pkiKeystorePass,
-                    context.diagnosticInputs.skipVerification,
-                    context.diagsConfig.connectionTimeout,
-                    context.diagsConfig.connectionRequestTimeout,
-                    context.diagsConfig.socketTimeout);
 
            // Add it to the global cache - automatically closed on exit.
-            ResourceCache.addRestClient(Constants.restInputHost, restClient);
-            context.version = getElasticsearchVersion(restClient);
+            context.version = getElasticsearchVersion(context.restClient);
             String version = context.version.getValue();
             RestEntryConfig builder = new RestEntryConfig(version);
             Map restCalls = JsonYamlUtils.readYamlFromClasspath(Constants.ES_REST, true);

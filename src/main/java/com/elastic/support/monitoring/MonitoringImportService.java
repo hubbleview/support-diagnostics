@@ -5,17 +5,12 @@ import com.elastic.support.diagnostics.commands.CheckElasticsearchVersion;
 import com.elastic.support.rest.ElasticRestClientService;
 import com.elastic.support.Constants;
 import com.elastic.support.rest.RestClient;
-import com.elastic.support.rest.RestEntry;
 import com.elastic.support.util.*;
 import com.vdurmont.semver4j.Semver;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Vector;
 
@@ -72,7 +67,7 @@ public class MonitoringImportService extends ElasticRestClientService {
 
     private RestClient getClient(MonitoringImportInputs inputs, MonitoringImportConfig config){
 
-        return RestClient.getClient(
+        return new RestClient(
                 inputs.host,
                 inputs.port,
                 inputs.scheme,
@@ -89,7 +84,6 @@ public class MonitoringImportService extends ElasticRestClientService {
                 config.connectionRequestTimeout,
                 config.socketTimeout
         );
-
     }
 
 

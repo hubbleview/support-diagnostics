@@ -29,10 +29,6 @@ public class ResourceCache{
         }
     }
 
-    public static boolean resourceExists(String name){
-        return resources.containsKey(name);
-    }
-
     public static void addSystemCommand(String name, SystemCommand systemCommand){
         // Log the error if they tried to overlay with a dupe but don't throw an exception.
         resources.putIfAbsent(name, systemCommand );
@@ -44,17 +40,6 @@ public class ResourceCache{
         }
 
         throw new IllegalStateException("SystemCommand instance requested does not exist");
-    }
-
-    public static void addRestClient(String name, RestClient client){
-        resources.putIfAbsent(name, client);
-    }
-
-    public static RestClient getRestClient(String name){
-        if (resources.containsKey(name)){
-            return (RestClient)resources.get(name);
-        }
-        throw new IllegalStateException("RestClient instance does not exist");
     }
 
     // Centralized method for cleaning up console, ssh and http clients
